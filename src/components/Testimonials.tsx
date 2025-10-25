@@ -41,7 +41,7 @@ export const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-24 bg-transparent relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-1/3 h-full opacity-5">
         <Quote className="w-full h-full text-selectrik-blue" />
@@ -55,11 +55,17 @@ export const Testimonials = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-selectrik-dark mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Ce Spun Clienții Noștri
           </h2>
-          <div className="h-1.5 w-32 bg-selectrik-gold mx-auto mb-6" />
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: '8rem' }}
+            transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="h-1.5 bg-selectrik-gold mx-auto mb-6"
+          />
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">
             Feedback-ul clienților noștri este cea mai bună dovadă a calității muncii noastre
           </p>
         </motion.div>

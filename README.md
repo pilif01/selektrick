@@ -95,7 +95,7 @@ npm run preview
 - **Albastru Principal**: `#0B5FA5` / `#2B5FA5`
 - **Albastru Deschis**: `#3A7FC7`
 - **Albastru Închis**: `#1A3A5C`
-- **Auriu/Gold**: `#E8C547` / `#F4D03F`
+- **Auriu/Gold**: `#E8E683`
 
 ## 📁 Structură Proiect
 

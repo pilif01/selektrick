@@ -1,22 +1,29 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MessageCircle, X } from 'lucide-react';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const FloatingActionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  // Hide on project editor pages
+  if (location.pathname.startsWith('/proiectul-meu/') && location.pathname.split('/').length > 2) {
+    return null;
+  }
 
   const actions = [
     { 
       icon: Phone, 
       label: 'Sună acum', 
       color: 'bg-green-500', 
-      href: 'tel:0376442388' 
+      href: 'tel:0773386299' 
     },
     { 
       icon: MessageCircle, 
       label: 'WhatsApp', 
       color: 'bg-emerald-500', 
-      href: 'https://wa.me/40376442388' 
+      href: 'https://wa.me/40773386299' 
     },
   ];
 

@@ -53,7 +53,7 @@ export default {
         },
         selectrik: {
           blue: '#2B5FA5',
-          gold: '#E8C547',
+          gold: '#E8E683',
           dark: '#1A3A5C',
           light: '#3A7FC7',
         },

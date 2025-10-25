@@ -1,309 +1,432 @@
-import { motion } from 'framer-motion';
-import { Zap, Home, Building2, Sun, Shield, Wrench, ArrowRight, FileCheck, Leaf } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sun, Zap, Lightbulb, Shield, CheckCircle2, ChevronDown, ArrowRight, BadgeCheck, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const services = [
   {
-    icon: Home,
-    title: 'Instalații Electrice Rezidențiale',
-    description: 'Instalații electrice complete în Timișoara pentru locuințe și apartamente. Instalator autorizat ANRE cu experiență vastă.',
-    details: [
-      'Instalații electrice complete',
-      'Bransamente electrice',
-      'Tablouri electrice moderne',
-      'Verificare priză de pământ'
-    ],
-    color: 'from-blue-500 to-blue-600'
-  },
-  {
+    id: 'fotovoltaice',
+    title: 'sisteme fotovoltaice',
     icon: Sun,
-    title: 'Sisteme Fotovoltaice',
-    description: 'Instalare sisteme fotovoltaice pentru prosumatori. Dosar prosumator complet și consultanță pentru programul AFM.',
-    details: [
-      'Sisteme fotovoltaice complete',
-      'Dosar prosumator',
-      'Consultanță program AFM',
-      'Montaj și service'
+    subtitle: 'energie verde la cheie – totul cu un singur partener',
+    description: 'Utilizăm energia solară pentru a reduce costurile energetice și a proteja mediul prin instalarea panourilor solare de înaltă eficiență.',
+    features: [
+      {
+        title: 'eficiență energetică',
+        desc: 'oferim soluții pentru eficiență energetică adaptată nevoilor tale, pentru confortul și siguranța ta. Realizăm instalații fotovoltaice atât pentru uz rezidențial, cât și pentru cel industrial.'
+      },
+      {
+        title: 'calitate și încredere',
+        desc: 'folosim materiale de calitate, cu garanție, ca să dormi liniștit în timp ce produci curent. Panourile solare au o garanție de 15 ani, iar invertorul de 10 ani.'
+      },
+      {
+        title: 'consultanță la fiecare pas',
+        desc: 'suntem o echipă autorizată și cu experiență în domeniu, de aceea suntem aici să te ajutăm cu o perspectivă de viitor asupra casei tale.'
+      }
     ],
-    color: 'from-yellow-500 to-orange-500'
+    highlights: [
+      'prin finanțare proprie sau programe guvernamentale disponibile',
+      'soluție completă: de la furnizarea materialelor, montarea panourilor și invertorului până la automatizare',
+      'consultanță pentru programe de finanțare și documentație completă'
+    ]
   },
   {
-    icon: Building2,
-    title: 'Instalații Electrice Industriale',
-    description: 'Soluții complete pentru instalații electrice industriale cu standarde înalte de siguranță și performanță.',
-    details: [
-      'Instalații industriale',
-      'Proiectare complexă',
-      'Automatizări industriale',
-      'Mentenanță preventivă'
+    id: 'instalatii',
+    title: 'instalații electrice',
+    icon: Zap,
+    subtitle: 'de la branșament la priză – control total al energiei',
+    description: 'Electricienii noștri experți oferă instalări și reparații sigure și eficiente, atât pentru gospodării, cât și pentru afaceri.',
+    features: [
+      {
+        title: 'branșamente electrice',
+        desc: 'facilităm conectarea locuinței sau a afacerii la rețeaua de energie. Gestionăm întregul proces, de la obținerea autorizațiilor necesare până la finalizarea lucrărilor.'
+      },
+      {
+        title: 'instalații rezidențiale și industriale',
+        desc: 'oferim servicii complete pentru instalații electrice, asigurând calitatea și siguranța. Începem cu proiectarea și consultanța, colaborând cu clienții pentru a înțelege nevoile lor.'
+      },
+      {
+        title: 'interfoane și sisteme de detecție',
+        desc: 'pentru sporirea siguranței și confortului, oferim soluții moderne și eficiente. Interfoanele permit o comunicare facilă și un control al accesului.'
+      },
+      {
+        title: 'priză de pământ și paratrăsnet',
+        desc: 'oferim verificări și măsurători pentru priza de pământ. Priza de pământ minimizează riscurile de electrocutare și protejează echipamentele de avarii.'
+      }
     ],
-    color: 'from-purple-500 to-purple-600'
+    highlights: [
+      'servicii sigure și eficiente, folosind echipamente profesionale',
+      'toate lucrările respectă standardele de siguranță și reglementările în vigoare',
+      'execuție precisă și eficientă, reducând perturbările'
+    ]
+  },
+  {
+    id: 'consultanta',
+    title: 'consultanță și proiectare',
+    icon: Lightbulb,
+    subtitle: 'ideile tale, planul nostru',
+    description: 'Oferim îndrumare clienților în navigarea soluțiilor electrice, oferind recomandări pentru optimizare și eficiență energetică.',
+    features: [
+      {
+        title: 'analiză tehnică și soluții personalizate',
+        desc: 'specialiștii noștri analizează nevoile individuale și propun cele mai potrivite soluții pentru fiecare proiect în parte.'
+      },
+      {
+        title: 'proiectare tehnică detaliată',
+        desc: 'elaborăm schițe tehnice detaliate pentru implementarea precisă a sistemelor electrice. Asigurăm o planificare amănunțită care ia în considerare toate aspectele tehnice și de siguranță.'
+      },
+      {
+        title: 'dosare prosumator',
+        desc: 'ne ocupăm de formalitățile administrative pentru a facilita conectarea la rețea pentru prosumatori. Gestionăm întregul proces, de la completarea documentației până la coordonarea cu autoritățile.'
+      }
+    ],
+    highlights: [
+      'estimări clare de buget și timp',
+      'suport complet pentru dosarele de prosumator',
+      'ghidare pas cu pas, pe înțelesul tău',
+      'instalații electrice de joasă și medie tensiune',
+      'dimensionări corecte și eficiente',
+      'analize de consum și optimizare energetică'
+    ]
+  }
+];
+
+const faqs = [
+  {
+    q: 'În ce zonă desfășurați lucrări?',
+    a: 'Suntem localizați în județul Timiș, dar suntem flexibili și ne putem deplasa și în alte zone, în funcție de cerințele și nevoile clienților noștri. Această flexibilitate ne permite să acoperim o gamă mai largă de proiecte.'
+  },
+  {
+    q: 'Câți ani de experiență aveți?',
+    a: 'Pentru noi, experiența înseamnă proiecte reușite, clienți mulțumiți și sisteme care funcționează bine în timp. Am crescut cu fiecare lucrare, cu fiecare autorizație obținută și cu fiecare provocare rezolvată. Nu ne definim prin vechime, ci prin rezultate reale și expertiză pusă în practică, zi de zi.'
+  },
+  {
+    q: 'Ce servicii oferiți?',
+    a: 'Oferim o gamă variată de servicii, adaptate nevoilor fiecărui client. Acestea includ consultanță, proiectare, implementare și mentenanță, asigurându-ne că fiecare proiect este realizat la cele mai înalte standarde de calitate.'
+  },
+  {
+    q: 'Sunteți autorizați ANRE?',
+    a: 'Da, suntem autorizați ANRE, ceea ce ne permite să desfășurăm lucrări conform normelor și reglementărilor în vigoare. Această autorizație este o garanție a profesionalismului și a calității serviciilor pe care le oferim.'
+  },
+  {
+    q: 'Care este procesul de implementare a proiectului meu?',
+    a: 'Procesul începe cu o discuție detaliată pentru a înțelege pe deplin dorințele și cerințele tale. Pe baza acestor informații, realizăm o ofertă personalizată. După acceptare, programăm lucrarea eficient pentru a asigura finalizarea la timp.'
+  },
+  {
+    q: 'Ce se întâmplă dacă proiectul depășește bugetul?',
+    a: 'Ne angajăm să purtăm discuții deschise și transparente cu clienții noștri. Scopul nostru este să evităm surprizele neplăcute și să găsim soluții optime care să mențină costurile accesibile, fără a face rabat de la calitate.'
+  },
+  {
+    q: 'În cât timp pot primi oferta din partea voastră?',
+    a: 'Imediat ce avem clarificări asupra cerințelor și un plan detaliat, echipa noastră începe să lucreze la ofertă. Ne străduim să fim cât mai rapizi și eficienți, oferind o estimare precisă într-un timp rezonabil.'
+  },
+  {
+    q: 'Pot cere modificări pe parcursul colaborării?',
+    a: 'Suntem întotdeauna deschisi la discuții și modificări pe parcursul implementării proiectului. Înțelegem că cerințele pot evolua și ne dorim să colaborăm îndeaproape cu clienții noștri pentru rezultatul final perfect.'
+  }
+];
+
+const whyChooseUs = [
+  {
+    icon: BadgeCheck,
+    title: 'expertiză',
+    desc: 'ingineri autorizați și electricieni cu experiență reală în instalații electrice, fotovoltaice și branșamente complete, respectând toate normele ANRE.'
+  },
+  {
+    icon: Clock,
+    title: 'eficiență',
+    desc: 'planificăm execuția și optimizăm soluțiile pentru cel mai bun raport calitate-preț și consum redus de energie.'
   },
   {
     icon: Shield,
-    title: 'Sisteme de Detecție',
-    description: 'Instalare și configurare sisteme de detecție incendiu și securitate pentru siguranța maximă.',
-    details: [
-      'Detectie incendiu',
-      'Sisteme de securitate',
-      'Alarme și senzori',
-      'Monitorizare 24/7'
-    ],
-    color: 'from-red-500 to-red-600'
+    title: 'responsabilitate',
+    desc: 'ne asumăm fiecare proiect cu seriozitate, respectând normele tehnice și siguranța clientului. Nu promitem mai mult decât putem livra — dar livrăm exact ce am promis.'
   },
   {
-    icon: Leaf,
-    title: 'Energie Verde',
-    description: 'Soluții de energie verde și eficiență energetică pentru reducerea costurilor și protecția mediului.',
-    details: [
-      'Panouri solare',
-      'Optimizare consum',
-      'Consultanță energetică',
-      'Soluții eco-friendly'
-    ],
-    color: 'from-green-500 to-emerald-600'
-  },
-  {
-    icon: FileCheck,
-    title: 'Consultanță și Proiectare',
-    description: 'Servicii complete de consultanță și proiectare instalații electrice. Expertiză tehnică și documentație completă.',
-    details: [
-      'Proiectare instalații',
-      'Consultanță tehnică',
-      'Documentație ANRE',
-      'Audit energetic'
-    ],
-    color: 'from-indigo-500 to-indigo-600'
+    icon: Users,
+    title: 'suport',
+    desc: 'rămânem alături de tine și după finalizare, oferind mentenanță, consultanță și intervenții la nevoie.'
   }
 ];
 
 export const ServicesPage = () => {
+  const [selectedService, setSelectedService] = useState(services[0]);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   return (
-    <div className="min-h-screen bg-slate-50 pt-40 pb-16">
-      <div className="container mx-auto px-6">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20"
-        >
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="text-5xl md:text-6xl font-bold text-selectrik-dark mb-6"
-          >
-            Servicii Complete de Instalații Electrice
-          </motion.h1>
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: '10rem' }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="h-1.5 bg-selectrik-gold mx-auto mb-8"
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
-          >
-            Instalator autorizat ANRE în Timișoara. Oferim soluții complete pentru instalații electrice, 
-            sisteme fotovoltaice, bransamente electrice și verificare priză de pământ.
-          </motion.p>
-        </motion.div>
-
-        {/* AFM Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-gradient-to-r from-selectrik-gold to-yellow-400 rounded-3xl p-10 mb-20 text-center shadow-2xl relative overflow-hidden"
-        >
-          <motion.div
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.1, 0.3, 0.1],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute inset-0 bg-white rounded-3xl"
-          />
-          <div className="relative z-10">
-            <h2 className="text-4xl font-bold text-selectrik-dark mb-4">
-              🎉 Ai obținut un loc în Programul AFM?
-            </h2>
-            <p className="text-xl text-selectrik-dark mb-6">
-              Solicită acum oferta ideală pentru sistemul tău fotovoltaic!
-            </p>
-            <Link to="/contact">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="px-10 py-4 bg-selectrik-dark hover:bg-selectrik-blue text-white font-bold text-lg rounded-full transition-all duration-500 shadow-lg inline-flex items-center gap-3 group"
-              >
-                Cere Ofertă
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-              </motion.button>
-            </Link>
-          </div>
-        </motion.div>
-
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
+    <div className="min-h-screen pt-20">
+      {/* Hero */}
+      <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="mx-auto max-w-4xl text-center">
+            <motion.h1
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-white via-selectrik-gold to-white bg-clip-text text-transparent text-safe px-2"
             >
-              {/* Background gradient on hover */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
-              />
+              serviciile noastre
+            </motion.h1>
+            
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '8rem' }}
+              transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="h-1.5 bg-selectrik-gold mx-auto mb-6"
+            />
 
-              <div className="mb-6 relative">
-                <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  className={`w-16 h-16 bg-gradient-to-br ${service.color} rounded-xl flex items-center justify-center relative z-10 shadow-lg`}
-                >
-                  <service.icon className="w-8 h-8 text-white" />
-                </motion.div>
-                <motion.div
-                  className="absolute top-0 left-0 w-16 h-16 bg-selectrik-gold/20 rounded-xl -z-10"
-                  animate={{
-                    x: [0, 6, 0],
-                    y: [0, 6, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-              </div>
-              
-              <h3 className="text-2xl font-bold text-selectrik-dark mb-4 group-hover:text-selectrik-blue transition-colors duration-300">
-                {service.title}
-              </h3>
-              
-              <p className="text-gray-600 leading-relaxed mb-6">
-                {service.description}
-              </p>
+            <motion.p
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-3 sm:mb-4 text-safe px-4"
+            >
+              serviciile noastre sunt create pentru a răspunde nevoilor diverse ale clienților, oferind soluții personalizate care asigură satisfacție și eficiență.
+            </motion.p>
 
-              <ul className="space-y-3 mb-8">
-                {service.details.map((detail, idx) => (
-                  <motion.li
-                    key={idx}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 + idx * 0.1, duration: 0.5 }}
-                    className="flex items-center gap-3 text-sm text-gray-700"
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.3 }}
-                      className="w-2 h-2 bg-selectrik-gold rounded-full"
-                    />
-                    {detail}
-                  </motion.li>
-                ))}
-              </ul>
-
-              <Link to="/contact">
-                <motion.div
-                  whileHover={{ x: 8 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center text-selectrik-blue font-semibold group-hover:text-selectrik-gold transition-colors duration-300 cursor-pointer"
-                >
-                  Solicită ofertă
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </motion.div>
-              </Link>
-            </motion.div>
-          ))}
+            <motion.p
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-sm sm:text-base md:text-lg text-gray-400 text-safe px-4"
+            >
+              suntem aici pentru a-ți oferi suport, soluții inteligente și servicii de consultanță.
+            </motion.p>
+          </div>
         </div>
+      </section>
 
-        {/* Trust Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-          className="mt-24 bg-white rounded-3xl p-12 text-center shadow-2xl"
-        >
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-selectrik-dark mb-6">
-              Instalator Autorizat ANRE
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Servicii complete de instalații electrice în Timișoara. Lucrăm cu cele mai înalte 
-              standarde de calitate și siguranță pentru fiecare proiect.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm font-semibold text-gray-700">
-              {['Autorizat ANRE', 'Instalații Certificate', 'Garanție Extinsă', 'Service 24/7'].map((badge, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="px-6 py-3 bg-slate-100 rounded-full hover:bg-selectrik-blue hover:text-white transition-all duration-300"
-                >
-                  {badge}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-          className="mt-20 bg-gradient-to-br from-selectrik-blue to-selectrik-dark rounded-3xl p-12 text-center text-white relative overflow-hidden"
-        >
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-            }}
-            className="absolute top-0 right-0 w-96 h-96 bg-selectrik-gold rounded-full blur-3xl"
-          />
-          <div className="relative z-10">
-            <h2 className="text-4xl font-bold mb-6">
-              Suntem aici pentru tine
-            </h2>
-            <p className="text-xl mb-8 text-gray-200">
-              Contactează-ne pentru soluții personalizate, adaptate nevoilor și dorințelor tale.
-            </p>
-            <Link to="/contact">
+      {/* Service Selector */}
+      <section className="py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+          <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 justify-center mb-8 sm:mb-12 md:mb-16">
+            {services.map((service) => (
               <motion.button
-                whileHover={{ scale: 1.05, y: -3 }}
+                key={service.id}
+                onClick={() => setSelectedService(service)}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="px-10 py-4 bg-selectrik-gold hover:bg-yellow-400 text-selectrik-dark font-bold text-lg rounded-full transition-all duration-500 shadow-lg hover:shadow-2xl inline-flex items-center gap-3 group"
+                className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-semibold transition-all ${
+                  selectedService.id === service.id
+                    ? 'bg-gradient-to-r from-selectrik-blue to-selectrik-gold text-white shadow-lg'
+                    : 'bg-selectrik-dark/40 backdrop-blur-sm border border-selectrik-gold/20 text-gray-200 hover:border-selectrik-gold/50'
+                }`}
               >
-                Contactează-ne Acum
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                <service.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-safe whitespace-nowrap">{service.title}</span>
               </motion.button>
-            </Link>
+            ))}
           </div>
-        </motion.div>
-      </div>
+
+          {/* Service Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedService.id}
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(10px)" }}
+              transition={{ duration: 0.4 }}
+              className="space-y-12"
+            >
+              {/* Service Header */}
+              <div className="text-center px-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-selectrik-blue to-selectrik-gold p-0.5 mb-4 sm:mb-6">
+                  <div className="w-full h-full rounded-xl sm:rounded-2xl bg-selectrik-dark flex items-center justify-center">
+                    <selectedService.icon className="w-8 h-8 sm:w-10 sm:h-10 text-selectrik-gold" />
+                  </div>
+                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 text-safe">{selectedService.title}</h2>
+                <p className="text-base sm:text-lg md:text-xl text-selectrik-gold mb-4 sm:mb-6 text-safe">{selectedService.subtitle}</p>
+                <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl mx-auto text-safe leading-relaxed">{selectedService.description}</p>
+              </div>
+
+              {/* Features Grid */}
+              <div className="grid md:grid-cols-2 gap-4 sm:gap-6 px-2 sm:px-0">
+                {selectedService.features.map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                    className="bg-selectrik-dark/60 backdrop-blur-sm border border-selectrik-gold/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-selectrik-gold/50 transition-all"
+                  >
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 text-safe">{feature.title}</h3>
+                    <p className="text-sm sm:text-base text-gray-300 leading-relaxed text-safe">{feature.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Highlights */}
+              <div className="bg-gradient-to-br from-selectrik-blue/10 to-selectrik-gold/10 border border-selectrik-gold/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 mx-2 sm:mx-0">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center text-safe">beneficii cheie</h3>
+                <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
+                  {selectedService.highlights.map((highlight, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: idx * 0.05 }}
+                      className="flex items-start gap-2 sm:gap-3"
+                    >
+                      <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-selectrik-gold flex-shrink-0 mt-1" />
+                      <span className="text-sm sm:text-base text-gray-200 text-safe">{highlight}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-12 sm:py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-selectrik-blue/5 to-transparent" />
+        
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 sm:mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 text-safe px-4">de ce să ne alegi</h2>
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '8rem' }}
+              transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true }}
+              className="h-1.5 bg-selectrik-gold mx-auto"
+            />
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+            {whyChooseUs.map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -8 }}
+                className="group"
+              >
+                <div className="bg-selectrik-dark/60 backdrop-blur-sm border border-selectrik-gold/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 h-full hover:border-selectrik-gold/50 transition-all">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-selectrik-blue to-selectrik-gold p-0.5 mb-4 sm:mb-6">
+                    <div className="w-full h-full rounded-xl sm:rounded-2xl bg-selectrik-dark flex items-center justify-center">
+                      <item.icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-selectrik-gold" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 text-safe">{item.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-300 leading-relaxed text-safe">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 sm:mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 text-safe px-4">întrebări și răspunsuri</h2>
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '8rem' }}
+              transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true }}
+              className="h-1.5 bg-selectrik-gold mx-auto"
+            />
+          </motion.div>
+
+          <div className="space-y-3 sm:space-y-4">
+            {faqs.map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                viewport={{ once: true }}
+                className="bg-selectrik-dark/60 backdrop-blur-sm border border-selectrik-gold/20 rounded-lg sm:rounded-xl overflow-hidden hover:border-selectrik-gold/50 transition-all"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-4 sm:p-5 md:p-6 text-left"
+                >
+                  <h3 className="text-sm sm:text-base md:text-lg font-semibold text-white pr-3 sm:pr-4 text-safe leading-snug">{faq.q}</h3>
+                  <ChevronDown
+                    className={`w-4 h-4 sm:w-5 sm:h-5 text-selectrik-gold flex-shrink-0 transition-transform ${
+                      openFaq === idx ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <AnimatePresence>
+                  {openFaq === idx && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="px-4 sm:px-5 md:px-6 pb-4 sm:pb-5 md:pb-6 text-sm sm:text-base text-gray-300 leading-relaxed text-safe">{faq.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-12 sm:py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="relative rounded-2xl sm:rounded-3xl overflow-hidden max-w-5xl mx-auto"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-selectrik-blue via-selectrik-dark to-selectrik-blue opacity-90" />
+            
+            <div className="relative p-6 sm:p-8 md:p-12 lg:p-16 text-center">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 text-safe px-2">
+                ready to brighten the future with us?
+              </h3>
+              <p className="text-base sm:text-lg md:text-xl text-gray-100 mb-6 sm:mb-8 max-w-2xl mx-auto text-safe px-2">
+                alături de noi, vei avea șansa de a explora idei inovatoare și de a contribui la proiecte care pot schimba lumea.
+              </p>
+              <p className="text-selectrik-gold font-semibold mb-6 sm:mb-8 text-base sm:text-lg text-safe">
+                prima consultanță este gratuită!
+              </p>
+              
+              <Link to="/contact">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 bg-selectrik-gold rounded-full font-bold text-selectrik-dark text-sm sm:text-base md:text-lg shadow-2xl overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center gap-2 sm:gap-3 whitespace-nowrap">
+                    contactează-ne
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                </motion.button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 };

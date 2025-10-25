@@ -16,12 +16,17 @@ export function InteractiveHoverButton({
   
   const secondaryClasses = "group relative w-auto cursor-pointer overflow-hidden rounded-full border-2 border-selectrik-gold bg-transparent text-selectrik-gold px-6 py-3 text-center font-semibold transition-all duration-300";
 
+  // Separate motion props from HTML button props
+  const { onClick, disabled, type } = props;
+
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`${variant === 'primary' ? baseClasses : secondaryClasses} ${className}`}
-      {...props}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
     >
       <div className="flex items-center gap-2">
         <div className={`${variant === 'primary' ? 'bg-selectrik-gold' : 'bg-selectrik-dark'} h-2 w-2 rounded-full transition-all duration-300 group-hover:scale-[100.8]`}></div>

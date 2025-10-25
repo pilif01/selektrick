@@ -11,11 +11,11 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowText(true);
-    }, 800); // Mai rapid
+    }, 150); // start revealing quickly
 
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 2200); // Mai rapid
+    }, 1000); // finish within ~1s total
 
     return () => {
       clearTimeout(timer);
@@ -28,14 +28,14 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
       className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-selectrik-dark to-slate-900"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Subtle animated background */}
       <motion.div
         className="absolute inset-0"
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.05 }}
-        transition={{ duration: 1.5 }}
+        transition={{ duration: 0.8 }}
       >
         <motion.div
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-selectrik-blue rounded-full blur-3xl"
@@ -44,7 +44,7 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
             opacity: [0.1, 0.2, 0.1],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -56,10 +56,10 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
             opacity: [0.2, 0.1, 0.2],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 2
+            delay: 1.5
           }}
         />
       </motion.div>
@@ -75,16 +75,16 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
             y: showText ? -60 : 0
           }}
           transition={{ 
-            duration: 0.8,
+            duration: 0.4,
             type: "spring",
             stiffness: 200,
             damping: 25,
-            delay: 0.2,
+            delay: 0.05,
             y: {
               type: "spring",
               stiffness: 250,
               damping: 30,
-              delay: showText ? 0.1 : 0
+              delay: showText ? 0.05 : 0
             }
           }}
           className="relative mb-8"
@@ -97,10 +97,10 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
               opacity: [0.2, 0.4, 0.2],
             }}
             transition={{
-              duration: 2.5,
+              duration: 2,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 0.8
+              delay: 0.5
             }}
             className="absolute -inset-8 bg-gradient-to-r from-selectrik-blue to-selectrik-gold rounded-full blur-2xl"
           />
@@ -118,10 +118,10 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
               ]
             }}
             transition={{
-              duration: 3,
+              duration: 2.5,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 0.8
+              delay: 0.5
             }}
           />
         </motion.div>
@@ -135,7 +135,7 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
             scale: showText ? 1 : 0.9
           }}
           transition={{ 
-            duration: 0.7,
+            duration: 0.3,
             ease: [0.22, 1, 0.36, 1]
           }}
           className="text-center"
@@ -149,9 +149,9 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
               y: showText ? 0 : 20
             }}
             transition={{ 
-              duration: 0.6,
+              duration: 0.3,
               ease: [0.22, 1, 0.36, 1],
-              delay: showText ? 0.1 : 0
+              delay: showText ? 0.02 : 0
             }}
           >
             selectrik
@@ -164,9 +164,9 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
               y: showText ? 0 : 20
             }}
             transition={{ 
-              duration: 0.5,
+              duration: 0.3,
               ease: [0.22, 1, 0.36, 1],
-              delay: showText ? 0.2 : 0
+              delay: showText ? 0.1 : 0
             }}
             className="text-selectrik-gold text-lg tracking-wider font-semibold mb-6"
           >
@@ -176,15 +176,15 @@ export const LogoAnimation = ({ onComplete }: LogoAnimationProps) => {
           <motion.div
             initial={{ width: 0, opacity: 0 }}
             animate={{ 
-              width: showText ? '100%' : '0%', 
+              width: showText ? '8rem' : '0rem', 
               opacity: showText ? 1 : 0
             }}
             transition={{ 
-              duration: 0.8,
+              duration: 0.4,
               ease: [0.22, 1, 0.36, 1],
-              delay: showText ? 0.3 : 0
+              delay: showText ? 0.15 : 0
             }}
-            className="h-0.5 bg-gradient-to-r from-transparent via-selectrik-gold to-transparent mx-auto"
+            className="h-1.5 bg-selectrik-gold mx-auto"
           />
         </motion.div>
       </div>
